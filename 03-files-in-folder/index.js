@@ -9,9 +9,9 @@ async function readFolder() {
 
     for (const file of files)
       if (file.isFile()) {
-        const fileName = file.name.split('.')[0];
-        const fileExt = path.extname(file.name).slice(1);
         const filePath = path.join(folder, file.name);
+        const fileName = path.parse(filePath).name;
+        const fileExt = path.extname(filePath).slice(1);
         const stat = await fs.stat(filePath);
         console.log(`${fileName} - ${fileExt} - ${stat.size}b`);
       }
