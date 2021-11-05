@@ -23,7 +23,7 @@ async function copyDir() {
       }
       console.log('All files have been successfully copied');
     } else {
-      console.log("The folder 'files' doesn't exist, nothing to copy");
+      console.log('The folder \'files\' doesn\'t exist, nothing to copy');
     }
   } catch (err) {
     console.error(err);
