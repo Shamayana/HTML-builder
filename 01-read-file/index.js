@@ -7,5 +7,5 @@ const stream = fs.createReadStream(file, 'utf-8');
 let data = '';
 
 stream.on('data', (chunk) => (data += chunk));
-stream.on('end', () => console.log(data));
+stream.on('end', () => console.log(data.trim()));
 stream.on('error', (error) => console.log('Error', error.message));

@@ -5,7 +5,7 @@ const { stdin, stdout } = process;
 const file = path.join(__dirname, 'userText.txt');
 const output = fs.createWriteStream(file);
 
-stdout.write('Write some text\n');
+stdout.write('Hello! Write some text.\n');
 
 stdin.on('data', (data) => {
   let dataString = data.toString().trim();
