@@ -3,21 +3,17 @@ const path = require('path');
 
 const distFolder = path.join(__dirname, 'project-dist');
 
-async function clear() {
+async function buildHTML() {
   try {
-    if (distFolder) {
+    const arr = await fs.readdir('06-build-page', { withFileTypes: true });
+    const isDistFolderExist = arr.some((item) => item.name == 'project-dist');
+    if (isDistFolderExist) {
       await fs.rm(distFolder, { force: true, maxRetries: 10, recursive: true });
     }
-  } catch (err) {
-    console.error('1: ' + err);
-  }
-}
 
-async function buildHTML() {
-  const templFile = path.join(__dirname, 'template.html');
-  const compFolder = path.join(__dirname, 'components');
+    const templFile = path.join(__dirname, 'template.html');
+    const compFolder = path.join(__dirname, 'components');
 
-  try {
     const dataTemplFile = await fs.readFile(templFile, 'utf-8');
     await fs.mkdir(distFolder);
     await fs.writeFile(path.join(distFolder, 'index.html'), dataTemplFile);
@@ -36,7 +32,7 @@ async function buildHTML() {
       }
     }
   } catch (err) {
-    console.error('2: ' + err);
+    console.error('1: ' + err);
   }
 }
 
@@ -59,7 +55,7 @@ async function mergeStyles() {
 
     await fs.writeFile(path.join(distFolder, 'style.css'), dataArr.join('\n\n'));
   } catch (err) {
-    console.error('3: ' + err);
+    console.error('2: ' + err);
   }
 }
 
@@ -79,16 +75,19 @@ async function copyDir(origFolder, copyFolder) {
       }
     }
   } catch (err) {
-    console.error('4: ' + err);
+    console.error('3: ' + err);
   }
 }
 
 async function buildPage() {
-  await clear();
-  await buildHTML();
-  await mergeStyles();
-  await copyDir(path.join(__dirname, 'assets'), path.join(__dirname, 'project-dist', 'assets'));
-  console.log('The page is successfully created');
+  try {
+    await buildHTML();
+    await mergeStyles();
+    await copyDir(path.join(__dirname, 'assets'), path.join(__dirname, 'project-dist', 'assets'));
+    console.log('The page is successfully created');
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 buildPage();
