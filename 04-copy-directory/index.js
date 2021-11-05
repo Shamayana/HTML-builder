@@ -6,21 +6,24 @@ async function copyDir() {
   const copyFolder = path.join(__dirname, 'files-copy');
 
   try {
-    await fs.mkdir(copyFolder, { recursive: true });
-    const origFiles = await fs.readdir(origFolder);
-    const copyFiles = await fs.readdir(copyFolder);
+    const arr = await fs.readdir('04-copy-directory', { withFileTypes: true });
+    const isOrigFolderExist = arr.some((item) => item.name == 'files');
+    const isCopyFolderExist = arr.some((item) => item.name == 'files-copy');
 
-    if (copyFiles.length > 0) {
-      for (const copyFile of copyFiles) {
-        await fs.rm(path.join(copyFolder, copyFile));
+    if (isCopyFolderExist) await fs.rm(copyFolder, { recursive: true });
+
+    if (isOrigFolderExist) {
+      await fs.mkdir(copyFolder);
+      const origFiles = await fs.readdir(origFolder);
+
+      for (const fileName of origFiles) {
+        const origFile = path.join(origFolder, fileName);
+        const copyFile = path.join(copyFolder, fileName);
+        await fs.copyFile(origFile, copyFile);
       }
-    }
-
-    for (const fileName of origFiles) {
-      const origFile = path.join(origFolder, fileName);
-      const copyFile = path.join(copyFolder, fileName);
-      await fs.copyFile(origFile, copyFile);
-      console.log(`"${fileName}" is copied`);
+      console.log('All files have been successfully copied');
+    } else {
+      console.log("The folder 'files' doesn't exist, nothing to copy");
     }
   } catch (err) {
     console.error(err);
