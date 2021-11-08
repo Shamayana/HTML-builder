@@ -18,7 +18,7 @@ stdin.on('data', (data) => {
 });
 
 function exitProcess() {
-  stdout.write('Good bye! Good luck!');
+  stdout.write('Good bye! Good luck!\n');
   process.exit();
 }
 
