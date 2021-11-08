@@ -15,10 +15,10 @@ async function mergeStyles() {
       if (file.isFile() && fileExt == 'css') {
         const filePath = path.join(stylesFolder, file.name);
         const data = await fs.readFile(filePath, 'utf-8');
-        dataArr.push(data);
+        dataArr.push(data.trim());
       }
     }
-    await fs.writeFile(path.join(distFolder, 'bundle.css'), dataArr.join('\n'));
+    await fs.writeFile(path.join(distFolder, 'bundle.css'), dataArr.join('\n\n'));
     console.log('All styles are in the bundle');
   } catch (err) {
     console.error(err);
